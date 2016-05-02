@@ -9,8 +9,10 @@ import urlparse
 import getpass
 import shutil
 import argparse
+import time
 import zipfile
 from PIL import Image
+import sys
 
 desc = """This command-line tool helps you download Sentinel-1A and \
 Sentinel-2A data products from the European Space Agency's Scientific\
@@ -52,15 +54,34 @@ def DownloadFile(user, password, requrl, opath, auth):
     valid = False
     while valid == False:
         with open(opath, 'wb') as f:
+            print " - Start downloading ... "
+            print " - " + os.path.split(opath)[1]
+            start = time.time()
+
             r = requests.get(requrl, auth=auth, verify=False, stream=True)
-            f.write(r.content)
+            fileLength = int(r.headers.get('content-length'))
+            dl = 0
+            if fileLength is None:
+                f.write(r.content)
+            else:
+                done = 0
+                sys.stdout.write("[%s]" % (" " * 50))
+                sys.stdout.flush()
+                sys.stdout.write("\b" * (51))
+                for chunk in r.iter_content(1024):
+                    dl += len(chunk)
+                    f.write(chunk)
+                    changed = int(50 * dl / fileLength) != done
+                    done = int(50 * dl / fileLength)
+                    if changed == True:
+                        sys.stdout.write("[%s\r" % (done * "="))
+                        sys.stdout.flush()
+                sys.stdout.write("\n")
+                elapsedtime = (time.time() - start)/60
 
         if os.path.splitext(opath)[1] == ".zip":
             try:
-                print zipfile.is_zipfile(opath)
                 valid = zipfile.is_zipfile(opath)
-                print "valid: ", valid
-
             except:
                 print "Failed downloading. Sendown is gonna try it again."
                 print requrl
@@ -72,6 +93,9 @@ def DownloadFile(user, password, requrl, opath, auth):
                 img = None
             except:
                 print "Failed downloading. Sendown is gonna try it again."
+
+        if valid == True:
+            print "Download complete ... Time: %s mins" % (str(elapsedtime))
 
 def QueryProducts(user, password, query):
     try:
