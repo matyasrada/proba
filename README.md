@@ -1,7 +1,7 @@
-<b>sendown.py</b> is a command-line tool what helps you download Sentinel-1A or Sentinel-2A data products 
+<b>sendown.py</b> is a command-line tool that helps you download Sentinel-1A or Sentinel-2A data products 
 from the <a href="https://scihub.copernicus.eu/dhus/">European Space Agency's Scientific Datahub.</a>
-If you wish to download a Sentinel-2A product You can use this tool to fish into the data product 
-and download data for only a certain tile.
+If you wish to do a tile-based search for Sentinel-2A products You can use this tool to fish into the data product 
+and download only the data of the searched tile.
 <br><br>
 The tool uses the <a href="http://docs.python-requests.org/en/master/"><b>request</b></a> HTTP library of Python so the request library
 is need to be installed.
@@ -18,7 +18,7 @@ optional arguments:<br>
   <li><b>-u, --username </b>        username - SciHub username, if not set it goes as guest by default<br></li>
   <li><b>-o, --odir </b>            Output Directory <br></li>
   <li><b>-y, --type </b>            Sentinel-1A Product Type i.e. RAW, SLC, GRD <br></li>
-  <li><b>-q, --quicklook </b>       At first download quicklooks to the Output Directory <br></li>
+  <li><b>-q, --quicklook </b>       Downloading quicklooks to the Output Directory <br></li>
 </ul>
 
 <b> Example 1 </b><br>
