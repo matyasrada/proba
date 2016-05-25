@@ -217,7 +217,7 @@ def main():
 
     args = parser.parse_args()
 
-    apihub = 'https://scihub.copernicus.eu/apihub/search?rows=10000&q='
+    apihub = 'https://scihub.copernicus.eu/dhus/search?rows=10000&q='
 
     if args.user is 'guest':
         args.password = 'guest'
@@ -339,6 +339,9 @@ def main():
             print "Extent : ", list(args.extent)
         if args.platform == "S1A":
             longplat = "Sentinel-1"
+            platform = ' AND (platformname:%s)' % (longplat)
+        if args.platform == "S3A":
+            longplat = "Sentinel-3"
             platform = ' AND (platformname:%s)' % (longplat)
         if args.platform == "S2A":
             longplat = "Sentinel-2"
